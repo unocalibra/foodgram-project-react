@@ -8,8 +8,8 @@ class User(AbstractUser):
     email = models.EmailField(max_length=254, db_index=True, unique=True)
     name = models.TextField(max_length=254)
     last_name = models.TextField(max_length=254)
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'password', 'email', 'name', 'last_name']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email', 'password', 'name', 'last_name']
 
     class Meta:
         """Сортировка по id."""

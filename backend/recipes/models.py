@@ -8,12 +8,11 @@ from users.models import User
 class Ingredient(models.Model):
     """Модель ингредиента."""
     name = models.CharField('Название', max_length=200, db_index=True)
-    quantity = models.PositiveSmallIntegerField('Количество',)
     unit = models.CharField('Единица измерения', max_length=200)
 
     class Meta:
         verbose_name = 'ингредиент'
-        verbose_name_pural = 'ингредиенты'
+        verbose_name_plural = 'ингредиенты'
 
     def __str__(self):
         """Вернет название ингредиента."""
@@ -60,7 +59,7 @@ class Recipe(models.Model):
         """
         ordering = ['-pub_date']
         verbose_name = 'Рецепт'
-        verbose_name_pural = 'Рецепты'
+        verbose_name_plural = 'Рецепты'
 
     def __str__(self):
         """Вернет название рецепта."""
@@ -79,7 +78,7 @@ class IngredientIn(models.Model):
         on_delete=models.CASCADE,
         related_name='ingredientsrecipes'
     )
-    unit = models.PositiveSmallIntegerField(
+    quantity = models.PositiveSmallIntegerField(
         default=1,
         validators=[MinValueValidator(1, 'Не должно быть меньше 1')]
     )
@@ -89,7 +88,7 @@ class IngredientIn(models.Model):
         Создание уникальных пар между ингредиентом и рецептом.
         """
         verbose_name = 'Ингредиент рецепта.'
-        verbose_name_pural = 'Ингредиенты в рецепте.'
+        verbose_name_plural = 'Ингредиенты в рецепте.'
         constraints = [models.UniqueConstraint(fields=['ingredient', 'recipe'],
                                                name='unique_ingredientin')]
 
@@ -108,7 +107,7 @@ class TagRecipe(models.Model):
         Создание уникальных пар между тэгом и рецептом.
         """
         verbose_name = 'Тэг рецепта.'
-        verbose_name_pural = 'Тэги рецепта.'
+        verbose_name_plural = 'Тэги рецепта.'
         constraints = [models.UniqueConstraint(fields=['tag', 'recipe'],
                                                name='unique_tagrecipe')]
 
@@ -128,7 +127,7 @@ class Basket(models.Model):
         Создание уникальных пар между юзером и рецептом.
         """
         verbose_name = 'Корзина.'
-        verbose_name_pural = 'Корзины.'
+        verbose_name_plural = 'Корзины.'
         constraints = [models.UniqueConstraint(fields=['user', 'recipe'],
                                                name='unique_backet')]
 
@@ -178,7 +177,7 @@ class Favorite(models.Model):
         Создание уникальных пар между юзером и рецептом.
         """
         verbose_name = 'Избранное.'
-        verbose_name_pural = 'Избранные.'
+        verbose_name_plural = 'Избранные.'
         constraints = [models.UniqueConstraint(fields=['user', 'recipe'],
                                                name='unique_favorite')]
 
