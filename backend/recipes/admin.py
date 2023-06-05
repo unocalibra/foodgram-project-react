@@ -1,14 +1,32 @@
 from django.contrib import admin
 
 from users.models import User
-
 from .models import (Ingredient,
                      Tag,
                      Recipe,
                      Favorite,
                      IngredientIn,
                      Basket,
-                     Follow)
+                     Follow,
+                     TagRecipe)
+
+
+class IngredientInInline(admin.TabularInline):
+    """
+    Настройка отображения модели-вставки IngredientIn
+    без дополнительных форм extra.
+    """
+    model = IngredientIn
+    extra = 0
+
+
+class TagRecipeInline(admin.TabularInline):
+    """
+    Настройка отображения модели-вставки TagRecipe
+    без дополнительных форм extra.
+    """
+    model = TagRecipe
+    extra = 0
 
 
 @admin.register(User)
@@ -57,19 +75,11 @@ class RecipeAdmin(admin.ModelAdmin):
     search_fields = ('name', 'author', 'tag',)
     list_filter = ('name', 'author', 'tag',)
     empty_value_display = '-empty-'
+    inlines = (IngredientInInline, TagRecipeInline,)
 
     def count_in_fav(self, obj):
         """"Счетчик кол-ва добавлений в избранное."""
         return Favorite.objects.filter(recipe=obj).count()
-
-
-@admin.register(IngredientIn)
-class IngredientInAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения модели IngredientIn в интерфейсе админки.
-    """
-    list_display = ('id', 'ingredient', 'recipe', 'quantity')
-    empty_value_display = '-empty-'
 
 
 @admin.register(Favorite)

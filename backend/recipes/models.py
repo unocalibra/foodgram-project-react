@@ -87,8 +87,8 @@ class IngredientIn(models.Model):
         """
         Создание уникальных пар между ингредиентом и рецептом.
         """
-        verbose_name = 'Ингредиент рецепта.'
-        verbose_name_plural = 'Ингредиенты в рецепте.'
+        verbose_name = 'Ингредиент рецепта'
+        verbose_name_plural = 'Ингредиенты в рецепте'
         constraints = [models.UniqueConstraint(fields=['ingredient', 'recipe'],
                                                name='unique_ingredientin')]
 
@@ -106,8 +106,8 @@ class TagRecipe(models.Model):
         """
         Создание уникальных пар между тэгом и рецептом.
         """
-        verbose_name = 'Тэг рецепта.'
-        verbose_name_plural = 'Тэги рецепта.'
+        verbose_name = 'Тэг рецепта'
+        verbose_name_plural = 'Тэги рецепта'
         constraints = [models.UniqueConstraint(fields=['tag', 'recipe'],
                                                name='unique_tagrecipe')]
 
@@ -126,8 +126,8 @@ class Basket(models.Model):
         """
         Создание уникальных пар между юзером и рецептом.
         """
-        verbose_name = 'Корзина.'
-        verbose_name_plural = 'Корзины.'
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзины'
         constraints = [models.UniqueConstraint(fields=['user', 'recipe'],
                                                name='unique_backet')]
 
@@ -176,8 +176,8 @@ class Favorite(models.Model):
         """
         Создание уникальных пар между юзером и рецептом.
         """
-        verbose_name = 'Избранное.'
-        verbose_name_plural = 'Избранные.'
+        verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранное'
         constraints = [models.UniqueConstraint(fields=['user', 'recipe'],
                                                name='unique_favorite')]
 
