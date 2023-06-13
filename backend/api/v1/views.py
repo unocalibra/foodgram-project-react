@@ -8,13 +8,14 @@ from api.v1.serializers import (IngredientSerializer,
                                 FavoriteSerializer)
 from django.shortcuts import HttpResponse, get_object_or_404
 from djoser.views import UserViewSet
-from rest_framework import mixins, status, viewsets
+from rest_framework import mixins, status, viewsets, permissions
 from rest_framework.decorators import action
 from recipes.models import (Favorite, Ingredient, Recipe,
                             IngredientIn, Basket, Tag, Follow)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from api.v1.filter import IngredientFilter, RecipeFilter
 from users.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -24,7 +25,9 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     pagination_class = None
+    permission_classes = [permissions.AllowAny]
     filter_backends = (DjangoFilterBackend, )
+    filterset_class = IngredientFilter
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -32,6 +35,7 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     pagination_class = None
+    permission_classes = [permissions.AllowAny]
 
 
 class UserView(UserViewSet):
@@ -79,7 +83,9 @@ class AllFolowViewSet(mixins.ListModelMixin,
 class RecipeViewSet(viewsets.ModelViewSet):
     """Вьюсет рецептов."""
     queryset = Recipe.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, ]
+    filterset_class = RecipeFilter
 
     def perform_create(self, serializer):
         """Добавляем автора при создании рецепта."""
@@ -95,6 +101,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 class BasketAndFavoriteViewSet(viewsets.ModelViewSet):
     """Вьюсет общей обработки корзины и избранного."""
+    permission_classes = [permissions.IsAuthenticated]
+
     def create(self, request, *args, **kwargs):
         """Создание корзины и избранного."""
         recipe_id = int(self.kwargs['recipes_id'])
@@ -135,6 +143,8 @@ class DownloadBasket(viewsets.ModelViewSet):
     """
     Сохранение файла списка покупок.
     """
+    permission_classes = [permissions.IsAuthenticated]
+
     @action(detail=False)
     def download_basket(self, request):
         """Отправка файла со списком покупок."""
