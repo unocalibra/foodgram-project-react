@@ -16,11 +16,5 @@ urlpatterns = [
     path('users/<user_id>/subscribe/', FollowView.as_view(),
          name='subscribe'),
     path('', include(router.urls)),
-    # path('recipes/<recipes_id>/favorite/',
-    #      FavoriteViewSet.as_view({'post': 'create',
-    #                               'delete': 'delete'}), name='favorite'),
-    # path('recipes/<recipes_id>/shopping_cart/',
-    #      BasketViewSet.as_view({'post': 'create',
-    #                             'delete': 'delete'}), name='shopping_cart'),
     path('auth/', include('djoser.urls.authtoken')),
 ]
