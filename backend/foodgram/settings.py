@@ -102,7 +102,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'api.v1.pagination.MyPagination',
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.MyPagination',
 }
 
 DJOSER = {
@@ -112,14 +112,20 @@ DJOSER = {
     },
 
     'SERIALIZERS': {
-        'user_create': 'api.v1.serializers.SignUpSerializer',
-        'user': 'api.v1.serializers.UserGetSerializer',
-        'current_user': 'api.v1.serializers.UserGetSerializer',
+        'user_create': 'api.serializers.SignUpSerializer',
+        'user': 'api.serializers.UserGetSerializer',
+        'current_user': 'api.serializers.UserGetSerializer',
     }
 }
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

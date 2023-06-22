@@ -8,7 +8,7 @@ from users.models import User
 class Ingredient(models.Model):
     """Модель ингредиента."""
     name = models.CharField('Название', max_length=200, db_index=True)
-    unit = models.CharField('Единица измерения', max_length=200)
+    measurement_unit = models.CharField('Единица измерения', max_length=200)
 
     class Meta:
         verbose_name = 'ингредиент'
@@ -37,14 +37,14 @@ class Tag(models.Model):
 class Recipe(models.Model):
     """Модель рецепта."""
     name = models.CharField(max_length=200)
-    tag = models.ManyToManyField(Tag, verbose_name='Тэги')
+    tags = models.ManyToManyField(Tag, verbose_name='Тэги')
     ingredients = models.ManyToManyField(
         Ingredient, verbose_name="Ингредиенты")
-    time = models.PositiveSmallIntegerField(
+    cooking_time = models.PositiveSmallIntegerField(
         'Время готовки',
         validators=[MinValueValidator(1, 'Не должно быть меньше минуты!')])
-    description = models.TextField('Описание',
-                                   help_text='Введите описание рецепта')
+    text = models.TextField('Описание',
+                            help_text='Введите описание рецепта')
     image = models.ImageField(
         upload_to='recipes/', blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE,
@@ -78,7 +78,7 @@ class IngredientIn(models.Model):
         on_delete=models.CASCADE,
         related_name='ingredientsrecipes'
     )
-    quantity = models.PositiveSmallIntegerField(
+    amount = models.PositiveSmallIntegerField(
         default=1,
         validators=[MinValueValidator(1, 'Не должно быть меньше 1')]
     )

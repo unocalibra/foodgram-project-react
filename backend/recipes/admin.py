@@ -1,14 +1,9 @@
 from django.contrib import admin
 
 from users.models import User
-from .models import (Ingredient,
-                     Tag,
-                     Recipe,
-                     Favorite,
-                     IngredientIn,
-                     Basket,
-                     Follow,
-                     TagRecipe)
+
+from .models import (Basket, Favorite, Follow, Ingredient, IngredientIn,
+                     Recipe, Tag, TagRecipe)
 
 
 class IngredientInInline(admin.TabularInline):
@@ -49,7 +44,7 @@ class IngredientAdmin(admin.ModelAdmin):
     """
     Настройки отображения модели Ingredient в интерфейсе админки.
     """
-    list_display = ('name', 'unit')
+    list_display = ('name', 'measurement_unit')
     search_fields = ('name',)
     list_filter = ('name',)
     empty_value_display = '-empty-'
@@ -72,8 +67,8 @@ class RecipeAdmin(admin.ModelAdmin):
     Настройки отображения модели Recipe в интерфейсе админки.
     """
     list_display = ('id', 'name', 'author', 'count_in_fav')
-    search_fields = ('name', 'author', 'tag',)
-    list_filter = ('name', 'author', 'tag',)
+    search_fields = ('name', 'author', 'tags',)
+    list_filter = ('name', 'author', 'tags',)
     empty_value_display = '-empty-'
     inlines = (IngredientInInline, TagRecipeInline,)
 
