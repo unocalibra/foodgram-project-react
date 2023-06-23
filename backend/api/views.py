@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.filter import IngredientFilter, RecipeFilter
+from api.permissions import IsAdminAuthorOrReadOnly
 from api.serializers import (BasketSerializer, FavoriteSerializer,
                              IngredientSerializer, RecipeCreateSerializer,
                              RecipeSerializer, SignUpSerializer, TagSerializer,
@@ -46,7 +47,7 @@ class UserView(UserViewSet):
 
 class FollowView(APIView):
     """Вьюсет создания и удаления подписки."""
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAdminAuthorOrReadOnly]
 
     def post(self, request, user_id):
         """Создаем подписку."""
@@ -85,9 +86,8 @@ class AllFolowViewSet(mixins.ListModelMixin,
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """Вьюсет рецептов."""
-    http_method_names = ['get', 'post', 'patch', 'delete']
     queryset = Recipe.objects.all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminAuthorOrReadOnly]
     filter_backends = [DjangoFilterBackend, ]
     filterset_class = RecipeFilter
 

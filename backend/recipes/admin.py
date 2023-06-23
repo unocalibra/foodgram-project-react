@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-from users.models import User
-
 from .models import (Basket, Favorite, Follow, Ingredient, IngredientIn,
                      Recipe, Tag, TagRecipe)
 
@@ -22,21 +20,6 @@ class TagRecipeInline(admin.TabularInline):
     """
     model = TagRecipe
     extra = 0
-
-
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    """
-    Настройки отображения модели User в интерфейсе админки.
-    """
-    list_display = ('id',
-                    'username',
-                    'first_name',
-                    'last_name',
-                    'email')
-    search_fields = ('username', 'email')
-    list_filter = ('username', 'email')
-    empty_value_display = '-empty-'
 
 
 @admin.register(Ingredient)

@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from recipes.models import (Basket, Favorite, Follow, Ingredient, IngredientIn,
-                            Recipe, Tag, TagRecipe)
+                            Recipe, Tag)
 from users.models import User
 
 
@@ -207,22 +207,16 @@ class RecipeSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if request.user.is_anonymous:
             return False
-        if Favorite.objects.filter(user=request.user,
-                                   recipe__id=obj.id).exists():
-            return True
-        else:
-            return False
+        return Favorite.objects.filter(user=request.user,
+                                       recipe__id=obj.id).exists()
 
     def get_is_in_shopping_cart(self, obj):
         """Определение продуктов в корзине."""
         request = self.context.get('request')
         if request.user.is_anonymous:
             return False
-        if Basket.objects.filter(user=request.user,
-                                 recipe__id=obj.id).exists():
-            return True
-        else:
-            return False
+        return Basket.objects.filter(user=request.user,
+                                     recipe__id=obj.id).exists()
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
@@ -263,43 +257,25 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
     def create_ingredients_tags(self, data_tags, ingredients, recipe):
         """Изменение тэгов и игнредиентов рецепта."""
-        for data_tag in data_tags:
-            recipe.tags.add(data_tag)
-            recipe.save()
+        recipe.tags.add(*data_tags)
         for ingredient in ingredients:
             if not IngredientIn.objects.filter(
                 ingredient_id=ingredient['ingredient']['id'],
                     recipe=recipe).exists():
-                ingredientrecipe = IngredientIn.objects.create(
-                    ingredient_id=ingredient['ingredient']['id'],
-                    recipe=recipe)
-                ingredientrecipe.amount = ingredient['amount']
-                ingredientrecipe.save()
+                IngredientIn.objects.bulk_create([
+                    IngredientIn(ingredient_id=ingredient['ingredient']['id'],
+                                 recipe=recipe,
+                                 amount=ingredient['amount'])])
             else:
-                IngredientIn.objects.filter(
-                    recipe=recipe).delete()
-                recipe.delete()
                 raise serializers.ValidationError(
                     'Продукты уже есть в рецепте!')
         return recipe
 
     def create(self, validated_data):
         """Создание рецепта."""
-        name = validated_data.get('name')
         data_tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredientsrecipes')
-        cooking_time = validated_data.get('cooking_time')
-        text = validated_data.get('text')
-        image = validated_data.get('image')
-        author = validated_data.get('author')
-
-        recipe = Recipe.objects.create(
-            name=name,
-            cooking_time=cooking_time,
-            image=image,
-            text=text,
-            author=author
-        )
+        recipe = Recipe.objects.create(**validated_data)
         recipe = self.create_ingredients_tags(data_tags, ingredients, recipe)
         return recipe
 
@@ -307,10 +283,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         """Изменение рецепта."""
         data_tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredientsrecipes')
-        TagRecipe.objects.filter(recipe=instance).delete()
         IngredientIn.objects.filter(recipe=instance).delete()
+        instance.tags.clear()
         instance = self.create_ingredients_tags(
             data_tags, ingredients, instance)
         super().update(instance, validated_data)
-        instance.save()
         return instance

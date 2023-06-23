@@ -1,8 +1,9 @@
 from colorfield.fields import ColorField
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.contrib.auth import get_user_model
 
-from users.models import User
+User = get_user_model()
 
 
 class Ingredient(models.Model):
@@ -146,7 +147,7 @@ class Follow(models.Model):
         User, on_delete=models.CASCADE,
         related_name='following',
     )
-    created = models.DateTimeField(auto_now_add=True, db_index=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         """
