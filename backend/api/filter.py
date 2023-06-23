@@ -13,13 +13,13 @@ class RecipeFilter(FilterSet):
     is_favorited = filters.BooleanFilter(
         method='get_is_favorited'
     )
-    is_in_basket = filters.BooleanFilter(
-        method='get_is_in_basket'
+    is_in_shopping_cart = filters.BooleanFilter(
+        method='get_is_in_shopping_cart'
     )
 
     class Meta:
         model = Recipe
-        fields = ('author', 'tags', 'is_favorited', 'is_in_basket',)
+        fields = ('author', 'tags', 'is_favorited', 'is_in_shopping_cart',)
 
     def get_is_favorited(self, queryset, name, value):
         """
@@ -29,13 +29,13 @@ class RecipeFilter(FilterSet):
             return queryset.filter(favorites__user=self.request.user)
         return queryset
 
-    def get_is_in_basket(self, queryset, name, value):
+    def get_is_in_shopping_cart(self, queryset, name, value):
         """
-        Обработка фильтром параметра is_in_basket.
+        Обработка фильтром параметра is_in_shopping_cart.
         """
         if self.request.user.is_authenticated and value:
-            return queryset.filter(carts__user=self.request.user)
-        return queryset.all()
+            return queryset.filter(baskets__user=self.request.user)
+        return queryset
 
 
 class IngredientFilter(FilterSet):
