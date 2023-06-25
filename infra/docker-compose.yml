@@ -36,7 +36,6 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   backend:
-    # Из какого Dockerfile собирать образ для этого контейнера:
     build: ../backend/
     container_name: backend
     restart: always
@@ -44,6 +43,5 @@ services:
     volumes:
       - static:/app/backend/static/
       - media:/app/backend/media/
-    # Какие контейнеры нужно запустить до старта этого контейнера:
     depends_on:
       - db

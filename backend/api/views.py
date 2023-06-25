@@ -46,8 +46,7 @@ class UserView(UserViewSet):
 
 class FollowView(APIView):
     """Вьюсет создания и удаления подписки."""
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          IsAdminAuthorOrReadOnly]
+    permission_classes = [IsAdminAuthorOrReadOnly]
 
     def post(self, request, user_id):
         """Создаем подписку."""
