@@ -1,10 +1,9 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
-
 from recipes.models import (Basket, Favorite, Follow, Ingredient, IngredientIn,
                             Recipe, Tag)
+from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 from users.models import User
 
 
@@ -258,17 +257,19 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
     def create_ingredients_tags(self, data_tags, ingredients, recipe):
         """Изменение тэгов и игнредиентов рецепта."""
         recipe.tags.add(*data_tags)
+        ingredient_list = []
         for ingredient in ingredients:
             if not IngredientIn.objects.filter(
                 ingredient_id=ingredient['ingredient']['id'],
                     recipe=recipe).exists():
-                IngredientIn.objects.bulk_create([
+                ingredient_list.append(
                     IngredientIn(ingredient_id=ingredient['ingredient']['id'],
                                  recipe=recipe,
-                                 amount=ingredient['amount'])])
+                                 amount=ingredient['amount']))
             else:
                 raise serializers.ValidationError(
                     'Продукты уже есть в рецепте!')
+        IngredientIn.objects.bulk_create(ingredient_list)
         return recipe
 
     def create(self, validated_data):

@@ -1,12 +1,3 @@
-from django.db.models import Sum
-from django.shortcuts import HttpResponse, get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
-from djoser.views import UserViewSet
-from rest_framework import mixins, permissions, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from api.filter import IngredientFilter, RecipeFilter
 from api.permissions import IsAdminAuthorOrReadOnly
 from api.serializers import (BasketSerializer, FavoriteSerializer,
@@ -14,8 +5,16 @@ from api.serializers import (BasketSerializer, FavoriteSerializer,
                              RecipeSerializer, SignUpSerializer, TagSerializer,
                              UserFollowGetSerialazer, UserFollowSerializer)
 from api.utils import delete_instance, post_instance
+from django.db.models import Sum
+from django.shortcuts import HttpResponse, get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from djoser.views import UserViewSet
 from recipes.models import (Basket, Favorite, Follow, Ingredient, IngredientIn,
                             Recipe, Tag)
+from rest_framework import mixins, permissions, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from users.models import User
 
 
@@ -47,7 +46,8 @@ class UserView(UserViewSet):
 
 class FollowView(APIView):
     """Вьюсет создания и удаления подписки."""
-    permission_classes = [IsAdminAuthorOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          IsAdminAuthorOrReadOnly]
 
     def post(self, request, user_id):
         """Создаем подписку."""

@@ -4,7 +4,6 @@ from django.db import models
 
 class User(AbstractUser):
     """Класс для Юзера."""
-    # username = models.CharField(max_length=150, db_index=True, unique=True)
     email = models.EmailField(max_length=254, db_index=True, unique=True)
     first_name = models.TextField(max_length=254)
     last_name = models.TextField(max_length=254)
