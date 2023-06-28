@@ -8,14 +8,14 @@ volumes:
 services:
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: unocalibra/frontend
     container_name: frontend
     volumes:
       - ../frontend/:/app/result_build/
+    depends_on:
+      - backend
   nginx:
-    image: nginx:1.19.3
+    image: nginx:1.21.3
     container_name: gateway
     ports:
       - "80:80"
@@ -26,6 +26,7 @@ services:
       - static:/var/html/static/
       - media:/var/html/media/
     restart: always
+
   
   db:
     image: postgres:13.10
@@ -36,12 +37,12 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   backend:
-    build: ../backend/
+    image: unocalibra/backend
     container_name: backend
     restart: always
     env_file: .env
     volumes:
-      - static:/app/backend/static/
-      - media:/app/backend/media/
+      - static:/app/static/
+      - media:/app/media/
     depends_on:
       - db

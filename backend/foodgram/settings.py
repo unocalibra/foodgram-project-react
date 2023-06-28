@@ -8,7 +8,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'Dont forget to specify the secret key')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['foodgramm.myftp.biz', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -128,3 +128,7 @@ AUTH_USER_MODEL = 'users.User'
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS').split()
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
