@@ -60,14 +60,14 @@ class UserGetSerializer(UserSerializer):
                 filter(user=request.user, following__id=obj.id).exists())
 
 
-class SignUpSerializer(UserCreateSerializer):
+class SignUpSerializer(UserCreateSerializer, UserGetSerializer):
     """
     Сериализатор регистрации.
     """
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'first_name',
-                  'last_name', 'password')
+                  'last_name', 'is_subscribed', 'password')
 
 
 class RecipeMinifieldSerializer(serializers.ModelSerializer):
