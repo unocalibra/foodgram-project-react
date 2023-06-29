@@ -5,10 +5,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'Dont forget to specify the secret key')
 
-
 DEBUG = True
 
-ALLOWED_HOSTS = ['foodgramm.myftp.biz', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['foodgramm.myftp.biz',
+                 os.getenv('ALLOWED_HOSTS_2'),
+                 os.getenv('ALLOWED_HOSTS_3')]
 
 
 # Application definition
