@@ -3,9 +3,9 @@
 Link: https://foodgramm.myftp.biz
 IP: 158.160.27.251
 
-## Author: 
+## Автор: 
 
-Artyom (https://github.com/unocalibra) Yakupov 
+Якупов (https://github.com/unocalibra) Артём
 
 Дипломная работа по специальности Python-разработчик курса Яндекс.Практикум. Данная работа является заключительным этапом обучения. *
 В данной работе разработан бэкенд проекта согласно спецификации API. В репозитории есть папки frontend, backend, infra, tests:
@@ -25,15 +25,7 @@ Artyom (https://github.com/unocalibra) Yakupov
 ```bash
 # В Settings - Secrets and variables создаем переменный с вашими данными
 # Это необходимо для работы с CI/CD, DockerHub, GitHub
-SECRET_KEY #'< секретный ключ >'
-DEBUG #False
-ALLOWED_HOSTS #'127.0.0.1, .localhost, 011.222.333.444' - адрес вашего сервера
-DB_ENGINE #django.db.backends.postgresql
-DB_NAME #postgres
-POSTGRES_USER #postgres
-POSTGRES_PASSWORD #postgres
-DB_HOST #db
-DB_PORT #5432
+
 MODE #production
 HOST #011.222.333.444
 USER #admin
@@ -41,7 +33,8 @@ PASSWORD #password
 SSH_KEY #Приватный ключ
 DOCKER_USERNAME #Логин от докера
 DOCKER_PASSWORD #Пароль от докера
-
+TELEGRAM_TO #ваш телеграм id
+TELEGRAM_TOKEN #токер бота
 #для использование базы данных SQLite3 укажите: MODE=dev
 ```
 
